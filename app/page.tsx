@@ -154,6 +154,9 @@ interface WorkflowStep {
   icon: React.ReactNode;
   gifLabel: string;
   gifSrc?: string;
+  isPhone?: boolean;
+  width?: number;
+  height?: number;
 }
 
 const workflowSteps: WorkflowStep[] = [
@@ -165,7 +168,10 @@ const workflowSteps: WorkflowStep[] = [
     desc: "Customers access your clean storefront link on their mobile phone or scan a QR code at your business. They browse products, view details, and add items to their cart with zero account setup.",
     icon: <IconBrowse />,
     gifLabel: "Mobile catalogue browsing screen capture",
-    gifSrc: undefined,
+    gifSrc: "/assets/browse-catalog.gif",
+    isPhone: true,
+    width: 720,
+    height: 1600,
   },
   {
     step: "Step 2",
@@ -538,52 +544,75 @@ export default function Home() {
                   {currentStepData.desc}
                 </p>
 
-                {/* Framed GIF Holder */}
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-inner">
-                  {/* Chrome Bar */}
-                  <div className="flex items-center justify-between px-3.5 py-2.5 bg-neutral-950/90 border-b border-neutral-800 text-xs">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-neutral-700" />
-                      <div className="w-2 h-2 rounded-full bg-neutral-700" />
-                      <div className="w-2 h-2 rounded-full bg-neutral-700" />
-                      <span className="text-[10px] text-neutral-400 font-mono ml-2">
-                        haritham-garden.vercel.app
+                {/* Framed GIF / Recording Holder */}
+                {currentStepData.gifSrc && currentStepData.isPhone ? (
+                  /* Phone-shaped Recording Frame (Centered & Properly Proportioned) */
+                  <div className="flex justify-center my-2">
+                    <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-3xl border-2 border-neutral-700/80 bg-neutral-950 overflow-hidden shadow-2xl">
+                      {/* Phone Speaker / Top Bezel */}
+                      <div className="pt-3 pb-2 px-4 bg-neutral-950 flex items-center justify-between border-b border-neutral-900 text-[10px] text-neutral-400">
+                        <div className="w-12 h-1 rounded-full bg-neutral-800 mx-auto" />
+                      </div>
+
+                      {/* GIF Image */}
+                      <div className="aspect-[720/1600] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
+                        <img
+                          src={currentStepData.gifSrc}
+                          alt={currentStepData.title}
+                          width={currentStepData.width || 720}
+                          height={currentStepData.height || 1600}
+                          className="w-full h-full object-cover"
+                          loading="eager"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Standard Landscape / Browser Frame for Placeholders & Future Desktop Clips */
+                  <div className="rounded-xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-inner">
+                    {/* Chrome Bar */}
+                    <div className="flex items-center justify-between px-3.5 py-2.5 bg-neutral-950/90 border-b border-neutral-800 text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
+                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
+                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
+                        <span className="text-[10px] text-neutral-400 font-mono ml-2">
+                          haritham-garden.vercel.app
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-neutral-400 font-medium">
+                        {currentStepData.step} Demo
                       </span>
                     </div>
-                    <span className="text-[10px] text-neutral-400 font-medium">
-                      {currentStepData.step} Demo
-                    </span>
-                  </div>
 
-                  {/* GIF Container */}
-                  <div className="aspect-[16/9] sm:aspect-[16/8.5] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 flex flex-col items-center justify-center p-6 text-center relative">
-                    {currentStepData.gifSrc ? (
-                      <video
-                        src={currentStepData.gifSrc}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex flex-col items-center max-w-sm">
-                        <div className="w-12 h-12 rounded-xl bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-brand-400 mb-3">
-                          {currentStepData.icon}
+                    {/* Container */}
+                    <div className="aspect-[16/9] sm:aspect-[16/8.5] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 flex flex-col items-center justify-center p-6 text-center relative">
+                      {currentStepData.gifSrc ? (
+                        <img
+                          src={currentStepData.gifSrc}
+                          alt={currentStepData.title}
+                          className="w-full h-full object-cover"
+                          loading="eager"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center max-w-sm">
+                          <div className="w-12 h-12 rounded-xl bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-brand-400 mb-3">
+                            {currentStepData.icon}
+                          </div>
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-800 text-neutral-300 border border-neutral-700 mb-2">
+                            <IconVideo /> Demo recording — added soon
+                          </span>
+                          <p className="text-xs text-neutral-300 font-medium">
+                            {currentStepData.gifLabel}
+                          </p>
+                          <p className="text-[10px] text-neutral-500 mt-1">
+                            Silent screen-recording loop ({currentStepData.shortLabel.toLowerCase()})
+                          </p>
                         </div>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-800 text-neutral-300 border border-neutral-700 mb-2">
-                          <IconVideo /> Demo recording — added soon
-                        </span>
-                        <p className="text-xs text-neutral-300 font-medium">
-                          {currentStepData.gifLabel}
-                        </p>
-                        <p className="text-[10px] text-neutral-500 mt-1">
-                          Silent screen-recording loop ({currentStepData.shortLabel.toLowerCase()})
-                        </p>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
