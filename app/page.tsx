@@ -174,8 +174,8 @@ const workflowSteps: WorkflowStep[] = [
     laptopVideoSrc: "/assets/browse-catalog-laptop.mp4",
     phoneWidth: 720,
     phoneHeight: 1600,
-    laptopWidth: 1918,
-    laptopHeight: 926,
+    laptopWidth: 1920,
+    laptopHeight: 1080,
   },
   {
     step: "Step 2",
@@ -580,7 +580,7 @@ export default function Home() {
                         </div>
 
                         {/* Laptop Video Container */}
-                        <div className="aspect-[1918/926] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
+                        <div className="aspect-[16/9] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
                           <video
                             key="laptop-video"
                             src={currentStepData.laptopVideoSrc}
@@ -589,8 +589,8 @@ export default function Home() {
                             muted
                             playsInline
                             preload="auto"
-                            width={currentStepData.laptopWidth || 1918}
-                            height={currentStepData.laptopHeight || 926}
+                            width={currentStepData.laptopWidth || 1920}
+                            height={currentStepData.laptopHeight || 1080}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -625,7 +625,7 @@ export default function Home() {
                   ) : (
                     /* Pre-hydration skeleton to prevent layout shift */
                     <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden">
-                      <div className="hidden md:block aspect-[1918/926] w-full bg-neutral-950" />
+                      <div className="hidden md:block aspect-[16/9] w-full bg-neutral-950" />
                       <div className="block md:hidden max-w-[280px] mx-auto aspect-[720/1600] w-full bg-neutral-950" />
                     </div>
                   )
