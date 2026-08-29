@@ -2,8 +2,28 @@
 
 import { useState, useEffect } from "react";
 import AnimatedSection from "./components/AnimatedSection";
+import HeroNetworkBackground from "./components/HeroNetworkBackground";
 
 /* ─── Inline SVG Icons (Zero Dependencies) ─── */
+
+function IconMenu() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+    </svg>
+  );
+}
+
+function IconClose() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
 
 function IconBrowse() {
   return (
@@ -250,6 +270,7 @@ const adminFeatures = [
 /* ─── Main Pitch Page Component ─── */
 export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Responsive device state for conditional video mounting (avoids dual downloads)
   const [isDesktop, setIsDesktop] = useState(false);
@@ -322,13 +343,17 @@ export default function Home() {
       {/* ═══════════════ 1. FIXED / STICKY NAVBAR (Always Solid Dark) ═══════════════ */}
       <header className="sticky top-0 z-50 bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800/80 transition-colors">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2">
+          <a
+            href="#"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-2"
+          >
             <span className="text-base sm:text-lg font-bold tracking-tight text-neutral-50 select-none">
               Synera
             </span>
           </a>
 
-          {/* Clean Navigation Links */}
+          {/* Clean Navigation Links (Desktop) */}
           <nav className="hidden md:flex items-center gap-6 text-xs text-neutral-400 font-medium">
             <a href="#case-study" className="hover:text-neutral-200 transition-colors">
               Case Study
@@ -350,7 +375,7 @@ export default function Home() {
             </a>
           </nav>
 
-          <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="https://haritham-garden.vercel.app"
               target="_blank"
@@ -362,17 +387,94 @@ export default function Home() {
             </a>
             <a
               href="#contact"
+              onClick={() => setMobileMenuOpen(false)}
               className="btn-lift text-xs font-semibold px-4 sm:px-5 py-2 sm:py-2.5 min-h-[38px] sm:min-h-[42px] flex items-center rounded-full bg-brand-500 hover:bg-brand-400 text-neutral-950 transition-colors shadow-sm"
             >
               Contact
             </a>
+
+            {/* Mobile Menu Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900 transition-colors focus:outline-none cursor-pointer"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <IconClose /> : <IconMenu />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Dropdown Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-neutral-800 bg-neutral-950/98 backdrop-blur-xl px-4 py-4 space-y-1 shadow-2xl transition-all">
+            <nav className="flex flex-col space-y-1 text-sm font-medium">
+              <a
+                href="#case-study"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-neutral-300 hover:text-neutral-50 hover:bg-neutral-900 transition-colors"
+              >
+                Case Study
+              </a>
+              <a
+                href="#workflow"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-neutral-300 hover:text-neutral-50 hover:bg-neutral-900 transition-colors"
+              >
+                How It Works
+              </a>
+              <a
+                href="#pwa"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-neutral-300 hover:text-neutral-50 hover:bg-neutral-900 transition-colors"
+              >
+                App Install
+              </a>
+              <a
+                href="#simulator"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-neutral-300 hover:text-neutral-50 hover:bg-neutral-900 transition-colors"
+              >
+                Demo Sandbox
+              </a>
+              <a
+                href="#owner-dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-neutral-300 hover:text-neutral-50 hover:bg-neutral-900 transition-colors"
+              >
+                Owner Panel
+              </a>
+              <a
+                href="#pricing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-neutral-300 hover:text-neutral-50 hover:bg-neutral-900 transition-colors"
+              >
+                What We Build
+              </a>
+              <div className="pt-2 pb-1 border-t border-neutral-800/80">
+                <a
+                  href="https://haritham-garden.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-lg text-neutral-300 hover:text-brand-400 hover:bg-neutral-900 transition-colors"
+                >
+                  <span>Haritham Live Demo</span>
+                  <IconExternalLink />
+                </a>
+              </div>
+            </nav>
+          </div>
+        )}
       </header>
 
       <main className="flex-1">
         {/* ═══════════════ 2. HERO SECTION ═══════════════ */}
         <section className="relative min-h-[88svh] sm:min-h-[92svh] flex items-center justify-center overflow-hidden bg-neutral-950">
+          {/* Faint animated network nodes background (Hero only) */}
+          <HeroNetworkBackground />
+
           <div className="relative z-10 max-w-3xl mx-auto px-5 text-center pt-10 sm:pt-14 pb-16">
             <AnimatedSection>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-medium mb-6">
