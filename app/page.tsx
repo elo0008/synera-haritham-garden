@@ -144,7 +144,7 @@ function IconVideo() {
   );
 }
 
-/* ─── Workflow Step Data (GIF-Driven Step-Through) ─── */
+/* ─── Workflow Step Data (Video-Driven Step-Through) ─── */
 interface WorkflowStep {
   step: string;
   shortLabel: string;
@@ -153,10 +153,12 @@ interface WorkflowStep {
   desc: string;
   icon: React.ReactNode;
   gifLabel: string;
-  gifSrc?: string;
-  isPhone?: boolean;
-  width?: number;
-  height?: number;
+  phoneVideoSrc?: string;
+  laptopVideoSrc?: string;
+  phoneWidth?: number;
+  phoneHeight?: number;
+  laptopWidth?: number;
+  laptopHeight?: number;
 }
 
 const workflowSteps: WorkflowStep[] = [
@@ -168,10 +170,12 @@ const workflowSteps: WorkflowStep[] = [
     desc: "Customers access your clean storefront link on their mobile phone or scan a QR code at your business. They browse products, view details, and add items to their cart with zero account setup.",
     icon: <IconBrowse />,
     gifLabel: "Mobile catalogue browsing screen capture",
-    gifSrc: "/assets/browse-catalog.gif",
-    isPhone: true,
-    width: 720,
-    height: 1600,
+    phoneVideoSrc: "/assets/browse-catalog-phone.mp4",
+    laptopVideoSrc: "/assets/browse-catalog-laptop.mp4",
+    phoneWidth: 720,
+    phoneHeight: 1600,
+    laptopWidth: 1918,
+    laptopHeight: 926,
   },
   {
     step: "Step 2",
@@ -181,7 +185,6 @@ const workflowSteps: WorkflowStep[] = [
     desc: "When ready, the customer taps order and their full item list, quantities, delivery note, and totals format into an instant WhatsApp message directed straight to your business phone.",
     icon: <IconWhatsApp />,
     gifLabel: "WhatsApp checkout hand-off recording",
-    gifSrc: undefined,
   },
   {
     step: "Step 3",
@@ -191,7 +194,6 @@ const workflowSteps: WorkflowStep[] = [
     desc: "You receive the incoming WhatsApp notification immediately while the order simultaneously logs into your private, easy-to-use business control panel.",
     icon: <IconBell />,
     gifLabel: "Incoming order alert & dashboard logging",
-    gifSrc: undefined,
   },
   {
     step: "Step 4",
@@ -201,7 +203,6 @@ const workflowSteps: WorkflowStep[] = [
     desc: "With one tap in the dashboard, update order progress from 'Received' to 'Preparing' or 'Dispatched', keeping your workflow organized without complex backends.",
     icon: <IconStatus />,
     gifLabel: "One-tap status update flow in dashboard",
-    gifSrc: undefined,
   },
   {
     step: "Step 5",
@@ -211,7 +212,6 @@ const workflowSteps: WorkflowStep[] = [
     desc: "Customers open their dedicated order status link anytime to view live updates on their delivery or pickup — no passwords to remember, no friction.",
     icon: <IconTrack />,
     gifLabel: "Customer live status tracking page",
-    gifSrc: undefined,
   },
 ];
 
@@ -250,6 +250,20 @@ const adminFeatures = [
 /* ─── Main Pitch Page Component ─── */
 export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
+
+  // Responsive device state for conditional video mounting (avoids dual downloads)
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(mq.matches);
+    setMounted(true);
+
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   // WhatsApp Sandbox State
   const [selectedProducts, setSelectedProducts] = useState<Record<string, ProductItem>>({
@@ -358,7 +372,7 @@ export default function Home() {
 
       <main className="flex-1">
         {/* ═══════════════ 2. HERO SECTION ═══════════════ */}
-        <section className="relative min-h-[88svh] sm:min-h-[92svh] flex items-center justify-center overflow-hidden bg-neutral-950 bg-texture-noise">
+        <section className="relative min-h-[88svh] sm:min-h-[92svh] flex items-center justify-center overflow-hidden bg-neutral-950">
           <div className="relative z-10 max-w-3xl mx-auto px-5 text-center pt-10 sm:pt-14 pb-16">
             <AnimatedSection>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-medium mb-6">
@@ -469,10 +483,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ═══════════════ 4. HOW IT WORKS (GIF-Driven Step-Through) ═══════════════ */}
+        {/* ═══════════════ 4. HOW IT WORKS (Video-Driven Step-Through) ═══════════════ */}
         <section
           id="workflow"
-          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950 bg-texture-noise"
+          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950"
         >
           <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
@@ -544,31 +558,79 @@ export default function Home() {
                   {currentStepData.desc}
                 </p>
 
-                {/* Framed GIF / Recording Holder */}
-                {currentStepData.gifSrc && currentStepData.isPhone ? (
-                  /* Phone-shaped Recording Frame (Centered & Properly Proportioned) */
-                  <div className="flex justify-center my-2">
-                    <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-3xl border-2 border-neutral-700/80 bg-neutral-950 overflow-hidden shadow-2xl">
-                      {/* Phone Speaker / Top Bezel */}
-                      <div className="pt-3 pb-2 px-4 bg-neutral-950 flex items-center justify-between border-b border-neutral-900 text-[10px] text-neutral-400">
-                        <div className="w-12 h-1 rounded-full bg-neutral-800 mx-auto" />
-                      </div>
+                {/* Framed Video / Placeholder Holder */}
+                {currentStepData.phoneVideoSrc && currentStepData.laptopVideoSrc ? (
+                  mounted ? (
+                    isDesktop ? (
+                      /* Laptop / Desktop Frame (>= md breakpoint: renders browse-catalog-laptop.mp4 ONLY) */
+                      <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-2xl">
+                        {/* Browser Top Chrome */}
+                        <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-900/90 border-b border-neutral-800 text-xs">
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                            <span className="text-[11px] text-neutral-400 font-mono ml-2">
+                              haritham-garden.vercel.app
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-neutral-400 font-medium">
+                            Desktop View
+                          </span>
+                        </div>
 
-                      {/* GIF Image */}
-                      <div className="aspect-[720/1600] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
-                        <img
-                          src={currentStepData.gifSrc}
-                          alt={currentStepData.title}
-                          width={currentStepData.width || 720}
-                          height={currentStepData.height || 1600}
-                          className="w-full h-full object-cover"
-                          loading="eager"
-                        />
+                        {/* Laptop Video Container */}
+                        <div className="aspect-[1918/926] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
+                          <video
+                            key="laptop-video"
+                            src={currentStepData.laptopVideoSrc}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="auto"
+                            width={currentStepData.laptopWidth || 1918}
+                            height={currentStepData.laptopHeight || 926}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
                       </div>
+                    ) : (
+                      /* Phone Frame (< md breakpoint: renders browse-catalog-phone.mp4 ONLY) */
+                      <div className="flex justify-center my-2">
+                        <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-3xl border-2 border-neutral-700/80 bg-neutral-950 overflow-hidden shadow-2xl">
+                          {/* Phone Top Bezel */}
+                          <div className="pt-3 pb-2 px-4 bg-neutral-950 flex items-center justify-between border-b border-neutral-900 text-[10px] text-neutral-400">
+                            <div className="w-12 h-1 rounded-full bg-neutral-800 mx-auto" />
+                          </div>
+
+                          {/* Phone Video Container */}
+                          <div className="aspect-[720/1600] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
+                            <video
+                              key="phone-video"
+                              src={currentStepData.phoneVideoSrc}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              preload="auto"
+                              width={currentStepData.phoneWidth || 720}
+                              height={currentStepData.phoneHeight || 1600}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    /* Pre-hydration skeleton to prevent layout shift */
+                    <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden">
+                      <div className="hidden md:block aspect-[1918/926] w-full bg-neutral-950" />
+                      <div className="block md:hidden max-w-[280px] mx-auto aspect-[720/1600] w-full bg-neutral-950" />
                     </div>
-                  </div>
+                  )
                 ) : (
-                  /* Standard Landscape / Browser Frame for Placeholders & Future Desktop Clips */
+                  /* Standard Landscape / Browser Frame for Steps 2-5 Placeholders */
                   <div className="rounded-xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-inner">
                     {/* Chrome Bar */}
                     <div className="flex items-center justify-between px-3.5 py-2.5 bg-neutral-950/90 border-b border-neutral-800 text-xs">
@@ -586,30 +648,21 @@ export default function Home() {
                     </div>
 
                     {/* Container */}
-                    <div className="aspect-[16/9] sm:aspect-[16/8.5] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 flex flex-col items-center justify-center p-6 text-center relative">
-                      {currentStepData.gifSrc ? (
-                        <img
-                          src={currentStepData.gifSrc}
-                          alt={currentStepData.title}
-                          className="w-full h-full object-cover"
-                          loading="eager"
-                        />
-                      ) : (
-                        <div className="flex flex-col items-center max-w-sm">
-                          <div className="w-12 h-12 rounded-xl bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-brand-400 mb-3">
-                            {currentStepData.icon}
-                          </div>
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-800 text-neutral-300 border border-neutral-700 mb-2">
-                            <IconVideo /> Demo recording — added soon
-                          </span>
-                          <p className="text-xs text-neutral-300 font-medium">
-                            {currentStepData.gifLabel}
-                          </p>
-                          <p className="text-[10px] text-neutral-500 mt-1">
-                            Silent screen-recording loop ({currentStepData.shortLabel.toLowerCase()})
-                          </p>
+                    <div className="aspect-[16/9] sm:aspect-[16/8.5] bg-neutral-950 flex flex-col items-center justify-center p-6 text-center relative">
+                      <div className="flex flex-col items-center max-w-sm">
+                        <div className="w-12 h-12 rounded-xl bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-brand-400 mb-3">
+                          {currentStepData.icon}
                         </div>
-                      )}
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-800 text-neutral-300 border border-neutral-700 mb-2">
+                          <IconVideo /> Demo recording — added soon
+                        </span>
+                        <p className="text-xs text-neutral-300 font-medium">
+                          {currentStepData.gifLabel}
+                        </p>
+                        <p className="text-[10px] text-neutral-500 mt-1">
+                          Silent screen-recording loop ({currentStepData.shortLabel.toLowerCase()})
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -730,7 +783,7 @@ export default function Home() {
         {/* ═══════════════ 6. INTERACTIVE WHATSAPP ORDER SIMULATOR ═══════════════ */}
         <section
           id="simulator"
-          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950 bg-texture-noise border-t border-neutral-800"
+          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950 border-t border-neutral-800"
         >
           <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
@@ -926,7 +979,7 @@ export default function Home() {
         {/* ═══════════════ 8. WHAT WE CAN BUILD FOR YOU (3 Tiers, No Fake Prices) ═══════════════ */}
         <section
           id="pricing"
-          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950 bg-texture-noise border-t border-neutral-800"
+          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950 border-t border-neutral-800"
         >
           <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
@@ -1048,7 +1101,7 @@ export default function Home() {
         {/* ═══════════════ 9. REBUILT TWO-COLUMN CONTACT SECTION ═══════════════ */}
         <section
           id="contact"
-          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950 bg-texture-noise border-t border-neutral-800"
+          className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-950 border-t border-neutral-800"
         >
           <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
             <div className="rounded-3xl border border-neutral-800 bg-neutral-900/90 p-6 sm:p-10 md:p-12 shadow-2xl">
