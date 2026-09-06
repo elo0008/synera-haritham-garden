@@ -129,6 +129,16 @@ function IconCustomize() {
   );
 }
 
+function IconInsights() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <path d="M3 3v18h18" />
+      <path d="M18 9l-5 5-4-4-6 6" />
+      <polyline points="14 9 18 9 18 13" />
+    </svg>
+  );
+}
+
 function IconMail() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
@@ -273,7 +283,19 @@ const adminFeatureGroups: AdminFeatureGroup[] = [
     items: [
       "Add, edit, or remove products anytime with a clean form",
       "Mark items in or out of stock with one switch",
-      "Organize items by categories with product photos and descriptions",
+      'Tag each product across multiple categories at once (e.g. a plant can appear under "Indoor," "Low Maintenance," and "Gift Plants" simultaneously)',
+      "Add product photos and descriptions for every item",
+    ],
+  },
+  {
+    title: "Order Tracking & Fulfillment",
+    icon: <IconOrders />,
+    items: [
+      "View incoming orders in an organized, chronological dashboard",
+      "Move orders through five clear stages — Pending, Handled, Paid, Packaged, Dispatched — in one click",
+      "Confirm courier cost per order before dispatch, so pricing stays accurate",
+      "Message customers directly on WhatsApp straight from the order pipeline — no need to leave the dashboard to follow up",
+      "Access customer delivery notes and complete order summaries",
     ],
   },
   {
@@ -286,12 +308,12 @@ const adminFeatureGroups: AdminFeatureGroup[] = [
     ],
   },
   {
-    title: "Order Tracking & Fulfillment",
-    icon: <IconOrders />,
+    title: "Sales & Business Insights",
+    icon: <IconInsights />,
     items: [
-      "View incoming orders in an organized, chronological dashboard",
-      "Update status (Received, Preparing, Dispatched) in one click",
-      "Access customer delivery notes and complete order summaries",
+      "See lifetime and monthly sales totals at a glance",
+      "Know how the business is doing without digging through spreadsheets",
+      "Basic order and sales breakdown built into the same dashboard",
     ],
   },
   {
@@ -943,10 +965,14 @@ export default function Home() {
               </p>
             </AnimatedSection>
 
-            {/* 4 Structured Feature Groups (No Video) */}
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {/* 5 Structured Feature Groups (No Video) */}
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {adminFeatureGroups.map((group, i) => (
-                <AnimatedSection key={i} delay={100 + i * 80}>
+                <AnimatedSection
+                  key={i}
+                  delay={100 + i * 70}
+                  className={i === 4 ? "md:col-span-2 lg:col-span-1" : ""}
+                >
                   <div className="h-full p-5 sm:p-6 rounded-2xl bg-neutral-950 border border-neutral-800 shadow-sm flex flex-col justify-between card-lift">
                     <div>
                       <div className="flex items-center gap-3 mb-4">
