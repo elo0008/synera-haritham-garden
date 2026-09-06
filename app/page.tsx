@@ -172,13 +172,14 @@ interface WorkflowStep {
   tag: string;
   desc: string;
   icon: React.ReactNode;
-  gifLabel: string;
+  gifLabel?: string;
   phoneVideoSrc?: string;
   laptopVideoSrc?: string;
   phoneWidth?: number;
   phoneHeight?: number;
   laptopWidth?: number;
   laptopHeight?: number;
+  caption?: string;
 }
 
 const workflowSteps: WorkflowStep[] = [
@@ -189,7 +190,6 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Customer View",
     desc: "Customers access your clean storefront link on their mobile phone or scan a QR code at your business. They browse products, view details, and add items to their cart with zero account setup.",
     icon: <IconBrowse />,
-    gifLabel: "Mobile catalogue browsing screen capture",
     phoneVideoSrc: "/assets/browse-catalog-phone.mp4",
     laptopVideoSrc: "/assets/browse-catalog-laptop.mp4",
     phoneWidth: 720,
@@ -204,7 +204,12 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Direct Checkout",
     desc: "When ready, the customer taps order and their full item list, quantities, delivery note, and totals format into an instant WhatsApp message directed straight to your business phone.",
     icon: <IconWhatsApp />,
-    gifLabel: "WhatsApp checkout hand-off recording",
+    phoneVideoSrc: "/assets/place-order-phone.mp4",
+    laptopVideoSrc: "/assets/place-order-laptop.mp4",
+    phoneWidth: 720,
+    phoneHeight: 1600,
+    laptopWidth: 1920,
+    laptopHeight: 1080,
   },
   {
     step: "Step 3",
@@ -213,7 +218,9 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Owner Alert",
     desc: "You receive the incoming WhatsApp notification immediately while the order simultaneously logs into your private, easy-to-use business control panel.",
     icon: <IconBell />,
-    gifLabel: "Incoming order alert & dashboard logging",
+    laptopVideoSrc: "/assets/owner-notified-laptop.mp4",
+    laptopWidth: 1920,
+    laptopHeight: 1080,
   },
   {
     step: "Step 4",
@@ -222,7 +229,9 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Status Control",
     desc: "With one tap in the dashboard, update order progress from 'Received' to 'Preparing' or 'Dispatched', keeping your workflow organized without complex backends.",
     icon: <IconStatus />,
-    gifLabel: "One-tap status update flow in dashboard",
+    laptopVideoSrc: "/assets/update-status-laptop.mp4",
+    laptopWidth: 1920,
+    laptopHeight: 1080,
   },
   {
     step: "Step 5",
@@ -231,7 +240,10 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Live Tracking",
     desc: "Customers open their dedicated order status link anytime to view live updates on their delivery or pickup — no passwords to remember, no friction.",
     icon: <IconTrack />,
-    gifLabel: "Customer live status tracking page",
+    laptopVideoSrc: "/assets/order-tracking-laptop.mp4",
+    laptopWidth: 1920,
+    laptopHeight: 1080,
+    caption: "From here, final delivery is tracked through the courier's own service.",
   },
 ];
 
@@ -660,11 +672,12 @@ export default function Home() {
                   {currentStepData.desc}
                 </p>
 
-                {/* Framed Video / Placeholder Holder */}
+                {/* Framed Video / Media Holder */}
                 {currentStepData.phoneVideoSrc && currentStepData.laptopVideoSrc ? (
+                  /* Dual-device step (Steps 1 & 2): responsive swap */
                   mounted ? (
                     isDesktop ? (
-                      /* Laptop / Desktop Frame (>= md breakpoint: renders browse-catalog-laptop.mp4 ONLY) */
+                      /* Laptop / Desktop Frame (>= md breakpoint: renders laptop video ONLY) */
                       <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-2xl">
                         {/* Browser Top Chrome */}
                         <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-900/90 border-b border-neutral-800 text-xs">
@@ -684,7 +697,7 @@ export default function Home() {
                         {/* Laptop Video Container */}
                         <div className="aspect-[16/9] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
                           <video
-                            key="laptop-video"
+                            key={`laptop-${activeStep}`}
                             src={currentStepData.laptopVideoSrc}
                             autoPlay
                             loop
@@ -698,7 +711,7 @@ export default function Home() {
                         </div>
                       </div>
                     ) : (
-                      /* Phone Frame (< md breakpoint: renders browse-catalog-phone.mp4 ONLY) */
+                      /* Phone Frame (< md breakpoint: renders phone video ONLY) */
                       <div className="flex justify-center my-2">
                         <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-3xl border-2 border-neutral-700/80 bg-neutral-950 overflow-hidden shadow-2xl">
                           {/* Phone Top Bezel */}
@@ -709,7 +722,7 @@ export default function Home() {
                           {/* Phone Video Container */}
                           <div className="aspect-[720/1600] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
                             <video
-                              key="phone-video"
+                              key={`phone-${activeStep}`}
                               src={currentStepData.phoneVideoSrc}
                               autoPlay
                               loop
@@ -725,21 +738,66 @@ export default function Home() {
                       </div>
                     )
                   ) : (
-                    /* Pre-hydration skeleton to prevent layout shift */
+                    /* Pre-hydration skeleton */
                     <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden">
                       <div className="hidden md:block aspect-[16/9] w-full bg-neutral-950" />
                       <div className="block md:hidden max-w-[280px] mx-auto aspect-[720/1600] w-full bg-neutral-950" />
                     </div>
                   )
+                ) : currentStepData.laptopVideoSrc ? (
+                  /* Single-device step (Steps 3, 4, 5): renders laptop video unconditionally across all viewports */
+                  <div>
+                    <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-2xl">
+                      {/* Browser Top Chrome */}
+                      <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-900/90 border-b border-neutral-800 text-xs">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                          <span className="text-[11px] text-neutral-400 font-mono ml-2">
+                            {activeStep === 2 || activeStep === 3
+                              ? "admin.yourbusiness.com"
+                              : "haritham-garden.vercel.app"}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-neutral-400 font-medium">
+                          {currentStepData.step} View
+                        </span>
+                      </div>
+
+                      {/* Laptop Video Container */}
+                      <div className="aspect-[16/9] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
+                        <video
+                          key={`single-${activeStep}`}
+                          src={currentStepData.laptopVideoSrc}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          preload="auto"
+                          width={currentStepData.laptopWidth || 1920}
+                          height={currentStepData.laptopHeight || 1080}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Supporting Caption (e.g. Step 5 courier disclaimer) */}
+                    {currentStepData.caption && (
+                      <p className="text-[11px] sm:text-xs text-neutral-400 mt-3 text-center leading-relaxed">
+                        {currentStepData.caption}
+                      </p>
+                    )}
+                  </div>
                 ) : (
-                  /* Standard Landscape / Browser Frame for Steps 2-5 Placeholders */
+                  /* Placeholder Fallback */
                   <div className="rounded-xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-inner">
                     {/* Chrome Bar */}
                     <div className="flex items-center justify-between px-3.5 py-2.5 bg-neutral-950/90 border-b border-neutral-800 text-xs">
                       <div className="flex items-center gap-1.5">
-                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
-                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
-                        <div className="w-2 h-2 rounded-full bg-neutral-700" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
                         <span className="text-[10px] text-neutral-400 font-mono ml-2">
                           haritham-garden.vercel.app
                         </span>
