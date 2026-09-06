@@ -330,6 +330,7 @@ const adminFeatureGroups: AdminFeatureGroup[] = [
 /* ─── Main Pitch Page Component ─── */
 export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
+  const [activeAdminFeature, setActiveAdminFeature] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // WhatsApp Sandbox State
@@ -965,35 +966,174 @@ export default function Home() {
               </p>
             </AnimatedSection>
 
-            {/* 5 Two-Column Card Rows */}
-            <div className="mt-10 space-y-4 sm:space-y-5">
-              {adminFeatureGroups.map((group, i) => (
-                <AnimatedSection key={i} delay={80 + i * 50}>
-                  <div className="rounded-2xl bg-neutral-950 border border-neutral-800 p-5 sm:p-6 md:p-7 shadow-sm">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 items-start">
-                      {/* Left column: Heading only */}
-                      <div className="md:col-span-1">
-                        <h3 className="text-base sm:text-lg font-bold text-neutral-100 tracking-tight">
-                          {group.title}
-                        </h3>
+            {/* Owner's Side: Master/Detail Layout (Desktop) & Accordion (Mobile) */}
+            <div className="mt-10">
+              {/* Desktop & Tablet: Two-Column Master/Detail Layout */}
+              <div className="hidden md:grid md:grid-cols-12 gap-6 items-start">
+                {/* Left Column: Vertical List of 5 Titles (Headings Only) */}
+                <div className="md:col-span-5 space-y-2.5">
+                  {adminFeatureGroups.map((group, i) => {
+                    const isActive = (activeAdminFeature >= 0 ? activeAdminFeature : 0) === i;
+                    return (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setActiveAdminFeature(i)}
+                        className={`w-full text-left p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                          isActive
+                            ? "bg-neutral-900 border-brand-500 shadow-sm"
+                            : "bg-neutral-950/60 border-neutral-800 hover:bg-neutral-900/60 hover:border-neutral-700"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-sm transition-colors ${
+                              isActive
+                                ? "bg-brand-500/15 border border-brand-500/30 text-brand-400"
+                                : "bg-neutral-900 border border-neutral-800 text-neutral-400"
+                            }`}
+                          >
+                            {group.icon}
+                          </div>
+                          <span
+                            className={`text-xs sm:text-sm font-semibold tracking-tight transition-colors ${
+                              isActive ? "text-neutral-100 font-bold" : "text-neutral-400"
+                            }`}
+                          >
+                            {group.title}
+                          </span>
+                        </div>
+                        <div
+                          className={`w-2 h-2 rounded-full shrink-0 transition-colors ${
+                            isActive ? "bg-brand-400" : "bg-neutral-800"
+                          }`}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Right Column: Detail Panel for Selected Feature */}
+                <div className="md:col-span-7">
+                  {(() => {
+                    const activeIndex = activeAdminFeature >= 0 ? activeAdminFeature : 0;
+                    const activeGroup = adminFeatureGroups[activeIndex];
+                    return (
+                      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6 sm:p-8 min-h-[360px] shadow-sm flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between pb-4 mb-5 border-b border-neutral-800">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                                {activeGroup.icon}
+                              </div>
+                              <h3 className="text-base sm:text-lg font-bold text-neutral-100 tracking-tight">
+                                {activeGroup.title}
+                              </h3>
+                            </div>
+                            <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider">
+                              {activeIndex + 1} of {adminFeatureGroups.length}
+                            </span>
+                          </div>
+
+                          <ul className="space-y-3.5">
+                            {activeGroup.items.map((item, idx) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-3 text-xs sm:text-sm text-neutral-300 leading-relaxed"
+                              >
+                                <span className="w-4 h-4 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
+                                  <IconCheck />
+                                </span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className="mt-8 pt-4 border-t border-neutral-800/80 flex items-center justify-between text-xs text-neutral-500">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
+                            Real-time owner dashboard
+                          </span>
+                          <span className="text-neutral-400 font-medium">Simple &amp; non-technical</span>
+                        </div>
                       </div>
-                      {/* Right column: Bullet list */}
-                      <div className="md:col-span-2">
-                        <ul className="space-y-2.5 sm:space-y-3">
-                          {group.items.map((item, idx) => (
-                            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                              <span className="w-4 h-4 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
-                                <IconCheck />
-                              </span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Mobile: Accordion (Single Column Stack) */}
+              <div className="md:hidden space-y-3">
+                {adminFeatureGroups.map((group, i) => {
+                  const isOpen = activeAdminFeature === i;
+                  return (
+                    <div
+                      key={i}
+                      className={`rounded-xl border transition-all overflow-hidden ${
+                        isOpen
+                          ? "bg-neutral-900/90 border-brand-500 shadow-sm"
+                          : "bg-neutral-950/60 border-neutral-800"
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setActiveAdminFeature(isOpen ? -1 : i)}
+                        className="w-full text-left p-4 flex items-center justify-between gap-3 cursor-pointer"
+                        aria-expanded={isOpen}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm ${
+                              isOpen
+                                ? "bg-brand-500/15 border border-brand-500/30 text-brand-400"
+                                : "bg-neutral-900 border border-neutral-800 text-neutral-400"
+                            }`}
+                          >
+                            {group.icon}
+                          </div>
+                          <span
+                            className={`text-xs sm:text-sm font-semibold tracking-tight ${
+                              isOpen ? "text-neutral-100 font-bold" : "text-neutral-300"
+                            }`}
+                          >
+                            {group.title}
+                          </span>
+                        </div>
+                        <svg
+                          className={`w-4 h-4 text-neutral-400 transition-transform duration-200 shrink-0 ${
+                            isOpen ? "rotate-180 text-brand-400" : ""
+                          }`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+
+                      {isOpen && (
+                        <div className="px-4 pb-4 pt-1 border-t border-neutral-800/80">
+                          <ul className="space-y-2.5 mt-2">
+                            {group.items.map((item, idx) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-2.5 text-xs text-neutral-300 leading-relaxed"
+                              >
+                                <span className="w-4 h-4 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
+                                  <IconCheck />
+                                </span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                </AnimatedSection>
-              ))}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
