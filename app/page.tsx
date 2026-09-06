@@ -965,34 +965,31 @@ export default function Home() {
               </p>
             </AnimatedSection>
 
-            {/* 5 Structured Feature Groups (No Video) */}
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {/* 5 Two-Column Card Rows */}
+            <div className="mt-10 space-y-4 sm:space-y-5">
               {adminFeatureGroups.map((group, i) => (
-                <AnimatedSection
-                  key={i}
-                  delay={100 + i * 70}
-                  className={i === 4 ? "md:col-span-2 lg:col-span-1" : ""}
-                >
-                  <div className="h-full p-5 sm:p-6 rounded-2xl bg-neutral-950 border border-neutral-800 shadow-sm flex flex-col justify-between card-lift">
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
-                          {group.icon}
-                        </div>
-                        <h3 className="text-sm sm:text-base font-bold text-neutral-100">
+                <AnimatedSection key={i} delay={80 + i * 50}>
+                  <div className="rounded-2xl bg-neutral-950 border border-neutral-800 p-5 sm:p-6 md:p-7 shadow-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 items-start">
+                      {/* Left column: Heading only */}
+                      <div className="md:col-span-1">
+                        <h3 className="text-base sm:text-lg font-bold text-neutral-100 tracking-tight">
                           {group.title}
                         </h3>
                       </div>
-                      <ul className="space-y-2.5">
-                        {group.items.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2.5 text-xs text-neutral-300 leading-relaxed">
-                            <span className="w-4 h-4 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
-                              <IconCheck />
-                            </span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {/* Right column: Bullet list */}
+                      <div className="md:col-span-2">
+                        <ul className="space-y-2.5 sm:space-y-3">
+                          {group.items.map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                              <span className="w-4 h-4 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
+                                <IconCheck />
+                              </span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </AnimatedSection>
