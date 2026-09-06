@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AnimatedSection from "./components/AnimatedSection";
 import HeroNetworkBackground from "./components/HeroNetworkBackground";
 
@@ -156,15 +156,7 @@ function IconCheck() {
   );
 }
 
-function IconVideo() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-      <polygon points="5 3 19 12 5 21 5 3" />
-    </svg>
-  );
-}
-
-/* ─── Workflow Step Data (Video-Driven Step-Through) ─── */
+/* ─── Workflow Step Data (Structured Feature Breakdown) ─── */
 interface WorkflowStep {
   step: string;
   shortLabel: string;
@@ -172,13 +164,7 @@ interface WorkflowStep {
   tag: string;
   desc: string;
   icon: React.ReactNode;
-  gifLabel?: string;
-  phoneVideoSrc?: string;
-  laptopVideoSrc?: string;
-  phoneWidth?: number;
-  phoneHeight?: number;
-  laptopWidth?: number;
-  laptopHeight?: number;
+  highlights: string[];
   caption?: string;
 }
 
@@ -190,12 +176,11 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Customer View",
     desc: "Customers access your clean storefront link on their mobile phone or scan a QR code at your business. They browse products, view details, and add items to their cart with zero account setup.",
     icon: <IconBrowse />,
-    phoneVideoSrc: "/assets/browse-catalog-phone.mp4",
-    laptopVideoSrc: "/assets/browse-catalog-laptop.mp4",
-    phoneWidth: 720,
-    phoneHeight: 1600,
-    laptopWidth: 1920,
-    laptopHeight: 1080,
+    highlights: [
+      "Opens directly on mobile or desktop via web link or QR code — no app download required.",
+      "Clean product catalogue with item photos, real-time pricing, and categories.",
+      "Customers can add, remove, and adjust item quantities in cart with zero registration.",
+    ],
   },
   {
     step: "Step 2",
@@ -204,12 +189,11 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Direct Checkout",
     desc: "When ready, the customer taps order and their full item list, quantities, delivery note, and totals format into an instant WhatsApp message directed straight to your business phone.",
     icon: <IconWhatsApp />,
-    phoneVideoSrc: "/assets/place-order-phone.mp4",
-    laptopVideoSrc: "/assets/place-order-laptop.mp4",
-    phoneWidth: 720,
-    phoneHeight: 1600,
-    laptopWidth: 1920,
-    laptopHeight: 1080,
+    highlights: [
+      "Cart automatically converts into a clean, itemized order summary.",
+      "Customer fills in their name and delivery address/note directly on screen.",
+      "One tap opens WhatsApp with the pre-formatted order sent straight to your business.",
+    ],
   },
   {
     step: "Step 3",
@@ -218,9 +202,11 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Owner Alert",
     desc: "You receive the incoming WhatsApp notification immediately while the order simultaneously logs into your private, easy-to-use business control panel.",
     icon: <IconBell />,
-    laptopVideoSrc: "/assets/owner-notified-laptop.mp4",
-    laptopWidth: 1920,
-    laptopHeight: 1080,
+    highlights: [
+      "Instant WhatsApp alert arrives directly on your business phone.",
+      "Order simultaneously records into your private web dashboard with timestamp.",
+      "All item details, quantities, totals, and customer notes organized in one view.",
+    ],
   },
   {
     step: "Step 4",
@@ -229,9 +215,11 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Status Control",
     desc: "With one tap in the dashboard, update order progress from 'Received' to 'Preparing' or 'Dispatched', keeping your workflow organized without complex backends.",
     icon: <IconStatus />,
-    laptopVideoSrc: "/assets/update-status-laptop.mp4",
-    laptopWidth: 1920,
-    laptopHeight: 1080,
+    highlights: [
+      "One-tap status updates (Received → Preparing → Dispatched / Ready).",
+      "Keep daily orders organized in a clean queue without complicated spreadsheets.",
+      "Status changes sync instantly to the customer's live tracking view.",
+    ],
   },
   {
     step: "Step 5",
@@ -240,16 +228,16 @@ const workflowSteps: WorkflowStep[] = [
     tag: "Live Tracking",
     desc: "Customers open their dedicated order status link anytime to view live updates on their delivery or pickup — no passwords to remember, no friction.",
     icon: <IconTrack />,
-    laptopVideoSrc: "/assets/order-tracking-laptop.mp4",
-    laptopWidth: 1920,
-    laptopHeight: 1080,
+    highlights: [
+      "Dedicated order tracking link sent to the customer with their order.",
+      "Live order progress updates in real-time as you change status in the dashboard.",
+      "Frictionless customer experience with zero password or login requirements.",
+    ],
     caption: "From here, final delivery is tracked through the courier's own service.",
   },
 ];
 
-/* ─── Qualitative Client Reference Badges ───
-   [PLACEHOLDER — Madhav to confirm which claims are true: e.g. "No monthly fees" / "Direct WhatsApp orders" / "Fully owned, no lock-in"]
-*/
+/* ─── Qualitative Client Reference Badges ─── */
 const clientReferenceBadges = [
   "No monthly software fees",
   "Direct WhatsApp ordering",
@@ -271,32 +259,56 @@ const sampleProducts: ProductItem[] = [
   { id: "P4", name: "Gardener Care Kit", price: 28, emoji: "✂️" },
 ];
 
-/* ─── Admin Feature List Copy ─── */
-const adminFeatures = [
-  { icon: <IconEdit />, text: "Add and edit your own products, anytime" },
-  { icon: <IconPrice />, text: "Update prices whenever you need to" },
-  { icon: <IconOrders />, text: "Manage incoming orders from one place, start to finish" },
-  { icon: <IconCustomize />, text: "Customize how your site looks and reads — no developer required" },
+/* ─── Admin Feature Groups (Structured Feature Display) ─── */
+interface AdminFeatureGroup {
+  title: string;
+  icon: React.ReactNode;
+  items: string[];
+}
+
+const adminFeatureGroups: AdminFeatureGroup[] = [
+  {
+    title: "Product & Catalogue Management",
+    icon: <IconEdit />,
+    items: [
+      "Add, edit, or remove products anytime with a clean form",
+      "Mark items in or out of stock with one switch",
+      "Organize items by categories with product photos and descriptions",
+    ],
+  },
+  {
+    title: "Live Pricing Control",
+    icon: <IconPrice />,
+    items: [
+      "Update prices whenever you need to without writing code",
+      "Price updates take effect immediately on the live storefront",
+      "No developer assistance or redeploy required",
+    ],
+  },
+  {
+    title: "Order Tracking & Fulfillment",
+    icon: <IconOrders />,
+    items: [
+      "View incoming orders in an organized, chronological dashboard",
+      "Update status (Received, Preparing, Dispatched) in one click",
+      "Access customer delivery notes and complete order summaries",
+    ],
+  },
+  {
+    title: "Simple & Independent Control",
+    icon: <IconCustomize />,
+    items: [
+      "Accessible on phone, tablet, or laptop browser",
+      "Clean interface designed for non-technical business owners",
+      "Zero monthly platform fees or forced software lock-in",
+    ],
+  },
 ];
 
 /* ─── Main Pitch Page Component ─── */
 export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Responsive device state for conditional video mounting (avoids dual downloads)
-  const [isDesktop, setIsDesktop] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    setIsDesktop(mq.matches);
-    setMounted(true);
-
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   // WhatsApp Sandbox State
   const [selectedProducts, setSelectedProducts] = useState<Record<string, ProductItem>>({
@@ -656,12 +668,20 @@ export default function Home() {
               })}
             </div>
 
-            {/* Active Step GIF Panel */}
+            {/* Active Step Structured Feature Panel */}
             <div className="rounded-2xl border border-neutral-800 bg-neutral-900/90 p-5 sm:p-8 shadow-lg">
               <div className="max-w-3xl mx-auto">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-400 border border-brand-500/30">
-                    {currentStepData.tag}
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-brand-500/15 border border-brand-500/30 flex items-center justify-center text-brand-400">
+                      {currentStepData.icon}
+                    </div>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-400 border border-brand-500/30">
+                      {currentStepData.tag}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider">
+                    {currentStepData.step} of 5
                   </span>
                 </div>
 
@@ -672,160 +692,30 @@ export default function Home() {
                   {currentStepData.desc}
                 </p>
 
-                {/* Framed Video / Media Holder */}
-                {currentStepData.phoneVideoSrc && currentStepData.laptopVideoSrc ? (
-                  /* Dual-device step (Steps 1 & 2): responsive swap */
-                  mounted ? (
-                    isDesktop ? (
-                      /* Laptop / Desktop Frame (>= md breakpoint: renders laptop video ONLY) */
-                      <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-2xl">
-                        {/* Browser Top Chrome */}
-                        <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-900/90 border-b border-neutral-800 text-xs">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                            <span className="text-[11px] text-neutral-400 font-mono ml-2">
-                              haritham-garden.vercel.app
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-neutral-400 font-medium">
-                            Desktop View
-                          </span>
-                        </div>
-
-                        {/* Laptop Video Container */}
-                        <div className="aspect-[16/9] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
-                          <video
-                            key={`laptop-${activeStep}`}
-                            src={currentStepData.laptopVideoSrc}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            preload="auto"
-                            width={currentStepData.laptopWidth || 1920}
-                            height={currentStepData.laptopHeight || 1080}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      /* Phone Frame (< md breakpoint: renders phone video ONLY) */
-                      <div className="flex justify-center my-2">
-                        <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-3xl border-2 border-neutral-700/80 bg-neutral-950 overflow-hidden shadow-2xl">
-                          {/* Phone Top Bezel */}
-                          <div className="pt-3 pb-2 px-4 bg-neutral-950 flex items-center justify-between border-b border-neutral-900 text-[10px] text-neutral-400">
-                            <div className="w-12 h-1 rounded-full bg-neutral-800 mx-auto" />
-                          </div>
-
-                          {/* Phone Video Container */}
-                          <div className="aspect-[720/1600] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
-                            <video
-                              key={`phone-${activeStep}`}
-                              src={currentStepData.phoneVideoSrc}
-                              autoPlay
-                              loop
-                              muted
-                              playsInline
-                              preload="auto"
-                              width={currentStepData.phoneWidth || 720}
-                              height={currentStepData.phoneHeight || 1600}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  ) : (
-                    /* Pre-hydration skeleton */
-                    <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden">
-                      <div className="hidden md:block aspect-[16/9] w-full bg-neutral-950" />
-                      <div className="block md:hidden max-w-[280px] mx-auto aspect-[720/1600] w-full bg-neutral-950" />
-                    </div>
-                  )
-                ) : currentStepData.laptopVideoSrc ? (
-                  /* Single-device step (Steps 3, 4, 5): renders laptop video unconditionally across all viewports */
-                  <div>
-                    <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-2xl">
-                      {/* Browser Top Chrome */}
-                      <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-900/90 border-b border-neutral-800 text-xs">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                          <span className="text-[11px] text-neutral-400 font-mono ml-2">
-                            {activeStep === 2 || activeStep === 3
-                              ? "admin.yourbusiness.com"
-                              : "haritham-garden.vercel.app"}
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-neutral-400 font-medium">
-                          {currentStepData.step} View
+                {/* Structured Breakdown Card */}
+                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-4 sm:p-6 space-y-3.5 shadow-inner">
+                  <h4 className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
+                    How it operates in practice
+                  </h4>
+                  <ul className="space-y-3">
+                    {currentStepData.highlights.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                        <span className="w-5 h-5 rounded-md bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
+                          <IconCheck />
                         </span>
-                      </div>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-                      {/* Laptop Video Container */}
-                      <div className="aspect-[16/9] w-full bg-neutral-950 flex items-center justify-center relative overflow-hidden">
-                        <video
-                          key={`single-${activeStep}`}
-                          src={currentStepData.laptopVideoSrc}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          preload="auto"
-                          width={currentStepData.laptopWidth || 1920}
-                          height={currentStepData.laptopHeight || 1080}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
+                  {/* Supporting Caption (Step 5 courier disclaimer) */}
+                  {currentStepData.caption && (
+                    <div className="mt-4 pt-3.5 border-t border-neutral-800/80 text-[11px] sm:text-xs text-neutral-400 leading-relaxed flex items-center gap-2">
+                      <span className="text-brand-400 font-semibold">Note:</span>
+                      <span>{currentStepData.caption}</span>
                     </div>
-
-                    {/* Supporting Caption (e.g. Step 5 courier disclaimer) */}
-                    {currentStepData.caption && (
-                      <p className="text-[11px] sm:text-xs text-neutral-400 mt-3 text-center leading-relaxed">
-                        {currentStepData.caption}
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  /* Placeholder Fallback */
-                  <div className="rounded-xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-inner">
-                    {/* Chrome Bar */}
-                    <div className="flex items-center justify-between px-3.5 py-2.5 bg-neutral-950/90 border-b border-neutral-800 text-xs">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                        <span className="text-[10px] text-neutral-400 font-mono ml-2">
-                          haritham-garden.vercel.app
-                        </span>
-                      </div>
-                      <span className="text-[10px] text-neutral-400 font-medium">
-                        {currentStepData.step} Demo
-                      </span>
-                    </div>
-
-                    {/* Container */}
-                    <div className="aspect-[16/9] sm:aspect-[16/8.5] bg-neutral-950 flex flex-col items-center justify-center p-6 text-center relative">
-                      <div className="flex flex-col items-center max-w-sm">
-                        <div className="w-12 h-12 rounded-xl bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-brand-400 mb-3">
-                          {currentStepData.icon}
-                        </div>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-800 text-neutral-300 border border-neutral-700 mb-2">
-                          <IconVideo /> Demo recording — added soon
-                        </span>
-                        <p className="text-xs text-neutral-300 font-medium">
-                          {currentStepData.gifLabel}
-                        </p>
-                        <p className="text-[10px] text-neutral-500 mt-1">
-                          Silent screen-recording loop ({currentStepData.shortLabel.toLowerCase()})
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
 
@@ -858,84 +748,55 @@ export default function Home() {
               </div>
             </AnimatedSection>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Column: Key PWA Advantages */}
-              <div className="lg:col-span-5 space-y-4">
-                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 shadow-sm">
-                  <div className="flex items-center gap-3 mb-1.5">
-                    <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-brand-400">
+            {/* 3-Card Structured Grid (No Video) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+              <AnimatedSection delay={100}>
+                <div className="h-full p-5 sm:p-6 rounded-2xl bg-neutral-950 border border-neutral-800 shadow-sm flex flex-col justify-between card-lift">
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-4">
                       <IconSmartphone />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-bold text-neutral-100">
+                    <h3 className="text-sm font-bold text-neutral-100 mb-2">
                       Home Screen App Icon
                     </h3>
+                    <p className="text-xs text-neutral-400 leading-relaxed">
+                      Sits right alongside other apps on iOS and Android. One tap launches your catalogue directly in full-screen view.
+                    </p>
                   </div>
-                  <p className="text-xs text-neutral-400 leading-relaxed">
-                    Sits right alongside other apps on iOS and Android. One tap launches your catalogue directly.
-                  </p>
                 </div>
+              </AnimatedSection>
 
-                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 shadow-sm">
-                  <div className="flex items-center gap-3 mb-1.5">
-                    <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-brand-400">
+              <AnimatedSection delay={180}>
+                <div className="h-full p-5 sm:p-6 rounded-2xl bg-neutral-950 border border-neutral-800 shadow-sm flex flex-col justify-between card-lift">
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-4">
                       <IconDownload />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-bold text-neutral-100">
+                    <h3 className="text-sm font-bold text-neutral-100 mb-2">
                       Zero App Store Friction
                     </h3>
+                    <p className="text-xs text-neutral-400 leading-relaxed">
+                      No 30% App Store commissions, no search friction, no waiting for downloads, passwords, or device storage space.
+                    </p>
                   </div>
-                  <p className="text-xs text-neutral-400 leading-relaxed">
-                    No 30% App Store fees, no search friction, no waiting for downloads or multi-step account registration.
-                  </p>
                 </div>
+              </AnimatedSection>
 
-                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 shadow-sm">
-                  <div className="flex items-center gap-3 mb-1.5">
-                    <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-brand-400">
+              <AnimatedSection delay={260}>
+                <div className="h-full p-5 sm:p-6 rounded-2xl bg-neutral-950 border border-neutral-800 shadow-sm flex flex-col justify-between card-lift">
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-4">
                       <IconTrack />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-bold text-neutral-100">
+                    <h3 className="text-sm font-bold text-neutral-100 mb-2">
                       Fast Repeat Orders
                     </h3>
-                  </div>
-                  <p className="text-xs text-neutral-400 leading-relaxed">
-                    Returning customers re-order in seconds right from their phone without navigating mobile browsers.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column: Framed PWA GIF Container */}
-              <div className="lg:col-span-7">
-                <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-2 shadow-md">
-                  <div className="rounded-xl border border-neutral-800 bg-neutral-950 overflow-hidden">
-                    {/* Chrome */}
-                    <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-900 border-b border-neutral-800 text-xs">
-                      <span className="text-[11px] text-neutral-300 font-semibold flex items-center gap-1.5">
-                        <IconSmartphone /> PWA Install Experience
-                      </span>
-                      <span className="text-[10px] text-neutral-400 bg-neutral-950 px-2 py-0.5 rounded border border-neutral-800">
-                        Browser Native
-                      </span>
-                    </div>
-
-                    {/* GIF Placeholder */}
-                    <div className="aspect-[16/10] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 flex flex-col items-center justify-center p-6 text-center relative">
-                      <div className="w-12 h-12 rounded-xl bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-brand-400 mb-3">
-                        <IconSmartphone />
-                      </div>
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-800 text-neutral-300 border border-neutral-700 mb-2">
-                        <IconVideo /> Demo recording — added soon
-                      </span>
-                      <p className="text-xs text-neutral-300 font-medium max-w-xs">
-                        &quot;Add to Home Screen&quot; prompt &amp; instant app launch flow
-                      </p>
-                      <p className="text-[10px] text-neutral-500 mt-1">
-                        Short screen-capture loop (real install prompt)
-                      </p>
-                    </div>
+                    <p className="text-xs text-neutral-400 leading-relaxed">
+                      Returning customers re-order in seconds right from their phone home screen without navigating mobile browser tabs.
+                    </p>
                   </div>
                 </div>
-              </div>
+              </AnimatedSection>
             </div>
           </div>
         </section>
@@ -1071,7 +932,7 @@ export default function Home() {
           id="owner-dashboard"
           className="scroll-mt-16 sm:scroll-mt-20 relative py-16 sm:py-24 md:py-28 bg-neutral-900/50 border-t border-neutral-800"
         >
-          <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
               <span className="section-divider" />
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-neutral-50 text-center tracking-tight">
@@ -1082,53 +943,31 @@ export default function Home() {
               </p>
             </AnimatedSection>
 
-            {/* Single Framed GIF Placeholder for Owner Dashboard */}
-            <AnimatedSection delay={100}>
-              <div className="mt-8 rounded-2xl border border-neutral-800 bg-neutral-950 overflow-hidden shadow-lg">
-                {/* Browser top chrome */}
-                <div className="flex items-center justify-between px-4 py-3 bg-neutral-900 border-b border-neutral-800">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-                    <span className="text-[11px] text-neutral-400 font-mono ml-2">
-                      admin.yourbusiness.com
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded border border-brand-500/20 font-semibold">
-                    Owner Dashboard Demo
-                  </span>
-                </div>
-
-                {/* GIF Video / Placeholder Frame */}
-                <div className="aspect-video sm:aspect-[16/9] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 flex flex-col items-center justify-center p-8 text-center relative">
-                  <div className="w-14 h-14 rounded-2xl bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-brand-400 mb-3">
-                    <IconVideo />
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold bg-neutral-800 text-neutral-200 border border-neutral-700 mb-2">
-                    Demo recording — added soon
-                  </span>
-                  <p className="text-xs sm:text-sm text-neutral-300 font-medium max-w-md">
-                    Full screen recording of the real admin panel in use
-                  </p>
-                  <p className="text-[11px] text-neutral-500 mt-1">
-                    Showing item creation, live price updates, and order status handling
-                  </p>
-                </div>
-              </div>
-            </AnimatedSection>
-
-            {/* 4 Feature Items */}
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {adminFeatures.map((feat, i) => (
-                <AnimatedSection key={i} delay={200 + i * 70}>
-                  <div className="card-lift flex items-start gap-3.5 p-4 rounded-xl bg-neutral-950 border border-neutral-800">
-                    <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
-                      {feat.icon}
+            {/* 4 Structured Feature Groups (No Video) */}
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {adminFeatureGroups.map((group, i) => (
+                <AnimatedSection key={i} delay={100 + i * 80}>
+                  <div className="h-full p-5 sm:p-6 rounded-2xl bg-neutral-950 border border-neutral-800 shadow-sm flex flex-col justify-between card-lift">
+                    <div>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                          {group.icon}
+                        </div>
+                        <h3 className="text-sm sm:text-base font-bold text-neutral-100">
+                          {group.title}
+                        </h3>
+                      </div>
+                      <ul className="space-y-2.5">
+                        {group.items.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2.5 text-xs text-neutral-300 leading-relaxed">
+                            <span className="w-4 h-4 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
+                              <IconCheck />
+                            </span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed pt-1.5">
-                      {feat.text}
-                    </p>
                   </div>
                 </AnimatedSection>
               ))}
