@@ -971,7 +971,7 @@ export default function Home() {
               {/* Desktop & Tablet: Two-Column Master/Detail Layout */}
               <div className="hidden md:grid md:grid-cols-12 gap-6 items-start">
                 {/* Left Column: Vertical List of 5 Titles (Headings Only) */}
-                <div className="md:col-span-5 space-y-2.5">
+                <div className="md:col-span-5 h-[420px] overflow-y-auto space-y-2.5">
                   {adminFeatureGroups.map((group, i) => {
                     const isActive = (activeAdminFeature >= 0 ? activeAdminFeature : 0) === i;
                     return (
