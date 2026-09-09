@@ -1019,22 +1019,27 @@ export default function Home() {
                     const activeIndex = activeAdminFeature >= 0 ? activeAdminFeature : 0;
                     const activeGroup = adminFeatureGroups[activeIndex];
                     return (
-                      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-6 sm:p-8 min-h-[360px] shadow-sm flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between pb-4 mb-5 border-b border-neutral-800">
-                            <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
-                                {activeGroup.icon}
-                              </div>
-                              <h3 className="text-base sm:text-lg font-bold text-neutral-100 tracking-tight">
-                                {activeGroup.title}
-                              </h3>
+                      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 shadow-sm h-[420px] flex flex-col">
+                        {/* Fixed header — does not scroll */}
+                        <div className="px-6 sm:px-8 pt-6 sm:pt-7 pb-4 border-b border-neutral-800 flex items-center justify-between shrink-0">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                              {activeGroup.icon}
                             </div>
-                            <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider">
-                              {activeIndex + 1} of {adminFeatureGroups.length}
-                            </span>
+                            <h3 className="text-base sm:text-lg font-bold text-neutral-100 tracking-tight">
+                              {activeGroup.title}
+                            </h3>
                           </div>
+                          <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider shrink-0">
+                            {activeIndex + 1} of {adminFeatureGroups.length}
+                          </span>
+                        </div>
 
+                        {/* Animated content area — re-mounts on key change to replay animation */}
+                        <div
+                          key={activeIndex}
+                          className="owner-panel-enter flex-1 overflow-y-auto px-6 sm:px-8 py-5"
+                        >
                           <ul className="space-y-3.5">
                             {activeGroup.items.map((item, idx) => (
                               <li
@@ -1050,7 +1055,8 @@ export default function Home() {
                           </ul>
                         </div>
 
-                        <div className="mt-8 pt-4 border-t border-neutral-800/80 flex items-center justify-between text-xs text-neutral-500">
+                        {/* Fixed footer */}
+                        <div className="px-6 sm:px-8 py-4 border-t border-neutral-800/80 flex items-center justify-between text-xs text-neutral-500 shrink-0">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
                             Real-time owner dashboard
