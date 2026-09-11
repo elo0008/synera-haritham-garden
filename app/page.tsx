@@ -166,6 +166,46 @@ function IconCheck() {
   );
 }
 
+function IconLeaf() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 1.1 9.8a7 7 0 0 1-9.1 8.2z" />
+      <path d="M2 22s5.5-1.5 7.5-3.5" />
+    </svg>
+  );
+}
+
+function IconPot() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <path d="M4 5h16v3H4z" />
+      <path d="M6 8l1.5 11.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5L18 8" />
+    </svg>
+  );
+}
+
+function IconSprout() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <path d="M7 20h10" />
+      <path d="M10 20c0-7 1-13 7-13 0 0-8.5 0-8.5 8.5" />
+      <path d="M4 11.5c4 0 7.5-1 8.5-5.5C8 5 4 8 4 11.5z" />
+    </svg>
+  );
+}
+
+function IconScissors() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <circle cx="6" cy="6" r="3" />
+      <circle cx="6" cy="18" r="3" />
+      <line x1="20" y1="4" x2="8.12" y2="15.88" />
+      <line x1="14.47" y1="14.48" x2="20" y2="20" />
+      <line x1="8.12" y1="8.12" x2="12" y2="12" />
+    </svg>
+  );
+}
+
 /* ─── Workflow Step Data (Structured Feature Breakdown) ─── */
 interface WorkflowStep {
   step: string;
@@ -259,14 +299,14 @@ interface ProductItem {
   id: string;
   name: string;
   price: number;
-  emoji: string;
+  icon: React.ReactNode;
 }
 
 const sampleProducts: ProductItem[] = [
-  { id: "P1", name: "Monstera Deliciosa", price: 24, emoji: "🪴" },
-  { id: "P2", name: "Terracotta Planter Pot", price: 15, emoji: "🏺" },
-  { id: "P3", name: "Organic Plant Soil (5kg)", price: 12, emoji: "🌱" },
-  { id: "P4", name: "Gardener Care Kit", price: 28, emoji: "✂️" },
+  { id: "P1", name: "Monstera Deliciosa", price: 24, icon: <IconLeaf /> },
+  { id: "P2", name: "Terracotta Planter Pot", price: 15, icon: <IconPot /> },
+  { id: "P3", name: "Organic Plant Soil (5kg)", price: 12, icon: <IconSprout /> },
+  { id: "P4", name: "Gardener Care Kit", price: 28, icon: <IconScissors /> },
 ];
 
 /* ─── Admin Feature Groups (Structured Feature Display) ─── */
@@ -649,100 +689,104 @@ export default function Home() {
             </AnimatedSection>
 
             {/* Step Selector Buttons (2 columns mobile, 5 across on desktop) */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 sm:gap-3 mt-10 mb-8">
-              {workflowSteps.map((s, idx) => {
-                const isActive = activeStep === idx;
-                return (
-                  <button
-                    key={s.step}
-                    type="button"
-                    onClick={() => setActiveStep(idx)}
-                    className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
-                      idx === 4 ? "col-span-2 sm:col-span-1" : ""
-                    } ${
-                      isActive
-                        ? "bg-neutral-900 border-brand-500 shadow-sm"
-                        : "bg-neutral-900/50 border-neutral-800 hover:bg-neutral-900 hover:border-neutral-700"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span
-                        className={`text-[10px] font-bold uppercase tracking-wider ${
-                          isActive ? "text-brand-400" : "text-neutral-500"
-                        }`}
-                      >
-                        {s.step}
-                      </span>
-                      <div
-                        className={`w-2 h-2 rounded-full ${
-                          isActive ? "bg-brand-400" : "bg-neutral-700"
-                        }`}
-                      />
-                    </div>
-                    <span
-                      className={`text-xs sm:text-sm font-semibold block leading-tight ${
-                        isActive ? "text-neutral-100" : "text-neutral-400"
+            <AnimatedSection delay={100}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 sm:gap-3 mt-10 mb-8">
+                {workflowSteps.map((s, idx) => {
+                  const isActive = activeStep === idx;
+                  return (
+                    <button
+                      key={s.step}
+                      type="button"
+                      onClick={() => setActiveStep(idx)}
+                      className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+                        idx === 4 ? "col-span-2 sm:col-span-1" : ""
+                      } ${
+                        isActive
+                          ? "bg-neutral-900 border-brand-500 shadow-sm"
+                          : "bg-neutral-900/50 border-neutral-800 hover:bg-neutral-900 hover:border-neutral-700"
                       }`}
                     >
-                      {s.shortLabel}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span
+                          className={`text-[10px] font-bold uppercase tracking-wider ${
+                            isActive ? "text-brand-400" : "text-neutral-500"
+                          }`}
+                        >
+                          {s.step}
+                        </span>
+                        <div
+                          className={`w-2 h-2 rounded-full ${
+                            isActive ? "bg-brand-400" : "bg-neutral-700"
+                          }`}
+                        />
+                      </div>
+                      <span
+                        className={`text-xs sm:text-sm font-semibold block leading-tight ${
+                          isActive ? "text-neutral-100" : "text-neutral-400"
+                        }`}
+                      >
+                        {s.shortLabel}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </AnimatedSection>
 
             {/* Active Step Structured Feature Panel */}
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-900/90 p-5 sm:p-8 shadow-lg">
-              <div className="max-w-3xl mx-auto">
-                <div className="flex items-center justify-between gap-4 mb-4">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-brand-500/15 border border-brand-500/30 flex items-center justify-center text-brand-400">
-                      {currentStepData.icon}
+            <AnimatedSection delay={200}>
+              <div className="rounded-2xl border border-neutral-800 bg-neutral-900/90 p-5 sm:p-8 shadow-lg">
+                <div className="max-w-3xl mx-auto">
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-brand-500/15 border border-brand-500/30 flex items-center justify-center text-brand-400">
+                        {currentStepData.icon}
+                      </div>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-400 border border-brand-500/30">
+                        {currentStepData.tag}
+                      </span>
                     </div>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-400 border border-brand-500/30">
-                      {currentStepData.tag}
+                    <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider">
+                      {currentStepData.step} of 5
                     </span>
                   </div>
-                  <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider">
-                    {currentStepData.step} of 5
-                  </span>
-                </div>
 
-                <h3 className="text-lg sm:text-xl font-bold text-neutral-100 mb-2">
-                  {currentStepData.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-6">
-                  {currentStepData.desc}
-                </p>
+                  <h3 className="text-lg sm:text-xl font-bold text-neutral-100 mb-2">
+                    {currentStepData.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-6">
+                    {currentStepData.desc}
+                  </p>
 
-                {/* Structured Breakdown Card */}
-                <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-4 sm:p-6 space-y-3.5 shadow-inner">
-                  <h4 className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
-                    How it operates in practice
-                  </h4>
-                  <ul className="space-y-3">
-                    {currentStepData.highlights.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                        <span className="w-5 h-5 rounded-md bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
-                          <IconCheck />
-                        </span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Structured Breakdown Card */}
+                  <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-4 sm:p-6 space-y-3.5 shadow-inner">
+                    <h4 className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
+                      How it operates in practice
+                    </h4>
+                    <ul className="space-y-3">
+                      {currentStepData.highlights.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                          <span className="w-5 h-5 rounded-md bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-0.5">
+                            <IconCheck />
+                          </span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
 
-                  {/* Supporting Caption (Step 5 courier disclaimer) */}
-                  {currentStepData.caption && (
-                    <div className="mt-4 pt-3.5 border-t border-neutral-800/80 text-[11px] sm:text-xs text-neutral-400 leading-relaxed flex items-center gap-2">
-                      <span className="text-brand-400 font-semibold">Note:</span>
-                      <span>{currentStepData.caption}</span>
-                    </div>
-                  )}
+                    {/* Supporting Caption (Step 5 courier disclaimer) */}
+                    {currentStepData.caption && (
+                      <div className="mt-4 pt-3.5 border-t border-neutral-800/80 text-[11px] sm:text-xs text-neutral-400 leading-relaxed flex items-center gap-2">
+                        <span className="text-brand-400 font-semibold">Note:</span>
+                        <span>{currentStepData.caption}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
 
-            <AnimatedSection delay={200}>
+            <AnimatedSection delay={280}>
               <p className="mt-8 text-center text-neutral-500 text-xs sm:text-sm">
                 One simple flow, start to finish — for both your customers and you.
               </p>
@@ -868,7 +912,15 @@ export default function Home() {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-2xl">{p.emoji}</span>
+                          <div
+                            className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                              isSelected
+                                ? "bg-brand-500/15 border border-brand-500/30 text-brand-400"
+                                : "bg-neutral-900 border border-neutral-800 text-neutral-400"
+                            }`}
+                          >
+                            {p.icon}
+                          </div>
                           <div>
                             <p className="text-xs font-semibold text-neutral-100 leading-snug">
                               {p.name}
@@ -925,7 +977,7 @@ export default function Home() {
                     </span>
                   </div>
 
-                  <div className="bg-neutral-950 rounded-xl p-3.5 border border-neutral-800 font-mono text-[11px] sm:text-xs text-neutral-300 min-h-[170px] whitespace-pre-wrap leading-relaxed">
+                  <div className="bg-neutral-950 rounded-xl p-3.5 border border-neutral-800 font-mono text-[11px] sm:text-xs text-neutral-300 h-[310px] overflow-y-auto whitespace-pre-wrap leading-relaxed">
                     {formattedWhatsAppText}
                   </div>
                 </div>
