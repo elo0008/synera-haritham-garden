@@ -969,9 +969,9 @@ export default function Home() {
             {/* Owner's Side: Master/Detail Layout (Desktop) & Accordion (Mobile) */}
             <div className="mt-10">
               {/* Desktop & Tablet: Two-Column Master/Detail Layout */}
-              <div className="hidden md:grid md:grid-cols-12 gap-6 items-start">
+              <div className="hidden md:grid md:grid-cols-12 gap-6 items-stretch">
                 {/* Left Column: Vertical List of 5 Titles (Headings Only) */}
-                <div className="md:col-span-5 h-[420px] overflow-y-auto space-y-2.5">
+                <div className="md:col-span-5 h-full space-y-2.5">
                   {adminFeatureGroups.map((group, i) => {
                     const isActive = (activeAdminFeature >= 0 ? activeAdminFeature : 0) === i;
                     return (
@@ -1014,12 +1014,12 @@ export default function Home() {
                 </div>
 
                 {/* Right Column: Detail Panel for Selected Feature */}
-                <div className="md:col-span-7">
+                <div className="md:col-span-7 h-full">
                   {(() => {
                     const activeIndex = activeAdminFeature >= 0 ? activeAdminFeature : 0;
                     const activeGroup = adminFeatureGroups[activeIndex];
                     return (
-                      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 shadow-sm h-[420px] flex flex-col">
+                      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 shadow-sm h-full min-h-[420px] flex flex-col">
                         {/* Fixed header — does not scroll */}
                         <div className="px-6 sm:px-8 pt-6 sm:pt-7 pb-4 border-b border-neutral-800 flex items-center justify-between shrink-0">
                           <div className="flex items-center gap-3">
@@ -1038,7 +1038,7 @@ export default function Home() {
                         {/* Animated content area — re-mounts on key change to replay animation */}
                         <div
                           key={activeIndex}
-                          className="owner-panel-enter flex-1 overflow-y-auto px-6 sm:px-8 py-5"
+                          className="owner-panel-enter flex-1 px-6 sm:px-8 py-5"
                         >
                           <ul className="space-y-3.5">
                             {activeGroup.items.map((item, idx) => (
