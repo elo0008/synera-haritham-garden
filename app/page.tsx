@@ -969,9 +969,9 @@ export default function Home() {
             {/* Owner's Side: Master/Detail Layout (Desktop) & Accordion (Mobile) */}
             <div className="mt-10">
               {/* Desktop & Tablet: Two-Column Master/Detail Layout */}
-              <div className="hidden md:grid md:grid-cols-12 gap-6 items-stretch">
+              <div className="hidden md:grid md:grid-cols-12 gap-6">
                 {/* Left Column: Vertical List of 5 Titles (Headings Only) */}
-                <div className="md:col-span-5 h-full space-y-2.5">
+                <div className="md:col-span-5 flex flex-col gap-2.5">
                   {adminFeatureGroups.map((group, i) => {
                     const isActive = (activeAdminFeature >= 0 ? activeAdminFeature : 0) === i;
                     return (
@@ -979,7 +979,7 @@ export default function Home() {
                         key={i}
                         type="button"
                         onClick={() => setActiveAdminFeature(i)}
-                        className={`w-full text-left p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                        className={`flex-1 w-full text-left p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                           isActive
                             ? "bg-neutral-900 border-brand-500 shadow-sm"
                             : "bg-neutral-950/60 border-neutral-800 hover:bg-neutral-900/60 hover:border-neutral-700"
@@ -1014,12 +1014,12 @@ export default function Home() {
                 </div>
 
                 {/* Right Column: Detail Panel for Selected Feature */}
-                <div className="md:col-span-7 h-full">
+                <div className="md:col-span-7 flex flex-col">
                   {(() => {
                     const activeIndex = activeAdminFeature >= 0 ? activeAdminFeature : 0;
                     const activeGroup = adminFeatureGroups[activeIndex];
                     return (
-                      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 shadow-sm h-full min-h-[420px] flex flex-col">
+                      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 shadow-sm flex-1 min-h-[420px] flex flex-col">
                         {/* Fixed header — does not scroll */}
                         <div className="px-6 sm:px-8 pt-6 sm:pt-7 pb-4 border-b border-neutral-800 flex items-center justify-between shrink-0">
                           <div className="flex items-center gap-3">
